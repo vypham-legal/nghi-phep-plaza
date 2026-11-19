@@ -1,0 +1,19 @@
+# Không bao giờ đưa dữ liệu thật lên repo (repo public)
+*.xlsx
+*.xlsm
+*.xls
+*.csv
+~$*
+data/
+exports/
+
+# Bí mật
+.env
+.env.*
+*.key
+
+# Hệ điều hành / trình soạn thảo
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
