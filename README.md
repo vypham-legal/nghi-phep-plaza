@@ -1,4 +1,6 @@
-# Nghỉ phép Plaza
+# Đăng ký nghỉ phép
+
+JVC & Central Plaza
 
 Web app quản lý đơn nghỉ phép: nhân viên nộp đơn, người duyệt duyệt, hệ thống tự trừ phép năm và lập bảng tổng hợp.
 
