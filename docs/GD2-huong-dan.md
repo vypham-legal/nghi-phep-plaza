@@ -28,4 +28,17 @@ Quên mật khẩu: HR mở **Nhân viên → Sửa → Đặt lại mật khẩ
 **Quỹ phép** → chọn năm → nhập cột (1)–(6) (hoặc bấm **Điền mặc định cho người chưa có quỹ**) → **Lưu thay đổi**.
 Số liệu tháng 1–10/2026 từ file Excel sẽ được nhập tự động ở Giai đoạn 5. Hiện tại chỉ cần nhập vài người để thử.
 
+## 5. Nhập / xuất Excel (màn Nhân viên và Quỹ phép)
+Mỗi màn có 3 nút:
+- **Tải file mẫu** — file Excel trống đúng cấu trúc, có danh sách chọn (Vai trò, Trạng thái), kiểm tra số và sheet **Hướng dẫn**. Mẫu Quỹ phép có sẵn Mã NV + họ tên của nhân viên đang làm.
+- **Nhập từ Excel** — chọn file → app hiện bảng **xem trước** từng dòng: Thêm mới / Cập nhật (ghi rõ đổi gì) / Không đổi / Lỗi (ghi rõ lý do). Có dòng lỗi thì **chưa ghi gì**; sửa file rồi nhập lại. Không lỗi → bấm **Nhập n dòng**.
+- **Xuất Excel** — tải dữ liệu hiện có theo đúng mẫu; sửa trên file rồi nhập ngược lại được.
+
+Quy tắc chính:
+- So khớp theo **Mã NV** (Quỹ phép: **Năm + Mã NV**). Có rồi → cập nhật; chưa có → thêm. Dòng không có trong file **không bị xóa**.
+- Ô để trống ở dòng đã có = **giữ nguyên** giá trị cũ. Muốn bỏ người duyệt: ghi `Không có`.
+- Nhập Nhân viên trước, Quỹ phép sau (Mã NV phải có sẵn).
+- Đọc được cả file Excel cũ (`Mau nghi phep.xlsx`, sheet *Nhân viên*): cột Email, NP tiêu chuẩn, NP năm nay… được nhận tự động; file không có cột Năm thì áp dụng năm đang chọn trên màn Quỹ phép.
+- File chỉ được đọc trên trình duyệt của bạn, không tải lên nơi nào khác.
+
 Làm xong, đánh dấu các mục trong `docs/GD2-kiem-thu.md` và báo kết quả.

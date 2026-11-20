@@ -1,6 +1,7 @@
 // HR: danh sách nhân viên, vai trò, người duyệt, tài khoản, đặt lại mật khẩu.
-import { h, clear, field, openDialog, toast } from '../ui.js';
+import { h, clear, field, openDialog, toast, errMsg } from '../ui.js';
 import { passwordProblem } from './auth.js';
+import { exportEmployees, importEmployees } from './hr-employees-excel.js';
 
 const ROLE_LABEL = { employee: 'Nhân viên', hr: 'HR' };
 
@@ -27,10 +28,21 @@ export async function renderEmployees(root, ctx) {
   search.addEventListener('input', () => { filter.q = search.value.trim().toLowerCase(); draw(); });
   status.addEventListener('change', () => { filter.status = status.value; draw(); });
 
+  const run = (fn) => async (e) => {
+    const btn = e.currentTarget;
+    btn.disabled = true;
+    try { await fn(); } catch (err) { toast(errMsg(err), 'error'); } finally { btn.disabled = false; }
+  };
+
   root.append(
     h('div', { class: 'page-head' },
       h('h2', { class: 'page-title' }, 'Nhân viên'),
-      h('button', { type: 'button', class: 'btn', onclick: () => editDialog(null) }, '+ Thêm nhân viên'),
+      h('div', { class: 'excel-actions' },
+        h('button', { type: 'button', class: 'btn btn-secondary', onclick: run(() => exportEmployees(employees, { template: true })) }, 'Tải file mẫu'),
+        h('button', { type: 'button', class: 'btn btn-secondary', onclick: run(() => importEmployees(ctx, employees, async () => { await load(); draw(); })) }, 'Nhập từ Excel'),
+        h('button', { type: 'button', class: 'btn btn-secondary', onclick: run(() => exportEmployees(employees)) }, 'Xuất Excel'),
+        h('button', { type: 'button', class: 'btn', onclick: () => editDialog(null) }, '+ Thêm nhân viên'),
+      ),
     ),
     h('div', { class: 'toolbar' }, search, status),
     summary,

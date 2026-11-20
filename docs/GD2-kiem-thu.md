@@ -48,6 +48,19 @@
 - [ ] F2. Thêm loại phép mới; trùng tên → báo "Tên loại phép đã tồn tại."
 - [ ] F3. Đổi "Trừ quỹ phép năm" hoặc đổi tên → app hỏi xác nhận.
 
+## H. Nhập / xuất Excel
+- [ ] H1. Nhân viên → **Tải file mẫu**: mở được bằng Excel; có sheet Nhân viên + Hướng dẫn; cột Vai trò / Trạng thái có danh sách chọn.
+- [ ] H2. **Xuất Excel**: đủ nhân viên, đúng người duyệt (Mã NV), cột xám "(tham khảo)".
+- [ ] H3. Sửa vị trí 1 người + thêm 2 người mới (người thứ nhất có người duyệt là người thứ hai, cùng trong file) → **Nhập từ Excel**: xem trước đúng "Cập nhật" / "Thêm mới"; nhập xong danh sách cập nhật, người duyệt gán đúng.
+- [ ] H4. File có lỗi (trùng Mã NV, email sai, email của người khác, vai trò lạ, Mã NV người duyệt không tồn tại) → báo **Lỗi** từng dòng, không có nút Nhập, dữ liệu không đổi.
+- [ ] H5. Nhập lại đúng file vừa xuất (không sửa gì) → toàn bộ "Không đổi".
+- [ ] H6. Ghi `Không có` ở cột người duyệt → bỏ người duyệt; để trống → giữ nguyên.
+- [ ] H7. Tự bỏ quyền HR / tự đánh dấu nghỉ việc của chính mình qua file → bị chặn.
+- [ ] H8. Quỹ phép → **Tải file mẫu** có sẵn Mã NV + họ tên; điền số → nhập → bảng cập nhật đúng; (7), (9) trong file Excel tự tính bằng công thức.
+- [ ] H9. Quỹ phép: số `0,3` / `-1` / `abc`, Mã NV chưa có, trùng Năm + Mã NV → báo lỗi từng dòng.
+- [ ] H10. Nhập file Excel cũ `Mau nghi phep.xlsx` ở cả 2 màn: Nhân viên nhận đủ 15 người (thông tin khớp); Quỹ phép nhận số (1)–(6) năm 2026 khớp file.
+- [ ] H11. Bấm Nhập từ Excel rồi đóng hộp chọn file → không có gì xảy ra, nút dùng lại được.
+
 ## G. Phân quyền qua giao diện
 - [ ] G1. Quản lý (không phải HR): chỉ thấy Trang chủ, không thấy menu HR.
 - [ ] G2. Nhân viên không có cách nào xem được thông tin người khác ngoài tên người duyệt của mình.

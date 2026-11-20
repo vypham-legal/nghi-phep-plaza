@@ -91,16 +91,16 @@ export function toast(message, type = 'ok') {
  * openDialog({ title, body: Node, submitText, onSubmit: async () => true|false, extraActions: [Node] })
  * onSubmit trả về true để đóng hộp thoại.
  */
-export function openDialog({ title, body, submitText = 'Lưu', onSubmit, extraActions = [] }) {
+export function openDialog({ title, body, submitText = 'Lưu', onSubmit, extraActions = [], wide = false, cancelText = 'Đóng' }) {
   const errorBox = h('p', { class: 'form-error', role: 'alert', hidden: true });
   const submitBtn = h('button', { type: 'submit', class: 'btn' }, submitText);
-  const cancelBtn = h('button', { type: 'button', class: 'btn btn-secondary' }, 'Đóng');
+  const cancelBtn = h('button', { type: 'button', class: 'btn btn-secondary' }, cancelText);
   const form = h('form', { class: 'dialog-form', novalidate: true },
     h('div', { class: 'dialog-head' }, h('h2', {}, title)),
     h('div', { class: 'dialog-body' }, body, errorBox),
     h('div', { class: 'dialog-actions' }, ...extraActions, h('span', { class: 'spacer' }), cancelBtn, onSubmit ? submitBtn : null),
   );
-  const dlg = h('dialog', { class: 'dialog' }, form);
+  const dlg = h('dialog', { class: wide ? 'dialog dialog-wide' : 'dialog' }, form);
   document.body.append(dlg);
 
   const close = () => { dlg.close(); dlg.remove(); };
@@ -125,7 +125,7 @@ export function openDialog({ title, body, submitText = 'Lưu', onSubmit, extraAc
   dlg.showModal();
   const first = form.querySelector('input:not([type=checkbox]), select, textarea');
   if (first) first.focus();
-  return { close, showError: (m) => { errorBox.textContent = m; errorBox.hidden = false; } };
+  return { close, submitBtn, showError: (m) => { errorBox.textContent = m; errorBox.hidden = false; } };
 }
 
 /** Ô nhập có nhãn */

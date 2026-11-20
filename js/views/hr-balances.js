@@ -1,5 +1,6 @@
 // HR: quỹ phép theo năm — nhập cột (1)–(6); (7), (8), (9) tự tính.
 import { h, clear, fmt, parseNum, isHalfStep, currentYear, toast, errMsg } from '../ui.js';
+import { exportBalances, importBalances } from './hr-balances-excel.js';
 
 const COLS = [
   ['standard_days', '(1)', 'NP tiêu chuẩn'],
@@ -28,8 +29,26 @@ export async function renderBalances(root, ctx) {
   const summary = h('p', { class: 'muted' });
   const tableBox = h('div', { class: 'table-wrap' });
 
+  const run = (fn) => async (e) => {
+    const btn = e.currentTarget;
+    btn.disabled = true;
+    try { await fn(); } catch (err) { toast(errMsg(err), 'error'); } finally { btn.disabled = false; }
+  };
+  const importBtn = h('button', { type: 'button', class: 'btn btn-secondary', onclick: run(async () => {
+    if (dirtyRows().length && !confirm('Có thay đổi chưa lưu trên bảng. Nhập file sẽ bỏ các thay đổi này. Tiếp tục?')) return;
+    await importBalances(ctx, year, reload);
+  }) }, 'Nhập từ Excel');
+
   root.append(
-    h('div', { class: 'page-head' }, h('h2', { class: 'page-title' }, 'Quỹ phép năm'), yearSel),
+    h('div', { class: 'page-head' },
+      h('h2', { class: 'page-title' }, 'Quỹ phép năm'),
+      h('div', { class: 'excel-actions' },
+        h('button', { type: 'button', class: 'btn btn-secondary', onclick: run(() => exportBalances(year, rows, { template: true })) }, 'Tải file mẫu'),
+        importBtn,
+        h('button', { type: 'button', class: 'btn btn-secondary', onclick: run(() => exportBalances(year, rows)) }, 'Xuất Excel'),
+        yearSel,
+      ),
+    ),
     h('div', { class: 'toolbar' }, saveBtn, undoBtn, fillBtn),
     summary,
     tableBox,

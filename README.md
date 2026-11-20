@@ -18,6 +18,7 @@ js/supabase-client.js   Khởi tạo kết nối (tự chặn secret key)
 js/app.js               Khởi động, điều hướng (#/...), menu theo vai trò
 js/state.js             Phiên đăng nhập + hồ sơ nhân viên
 js/ui.js                Tiện ích giao diện (hộp thoại, thông báo, định dạng số)
+js/excel.js             Đọc / ghi Excel trên trình duyệt (ExcelJS, tải khi cần)
 js/views/               Các màn hình: đăng nhập, đổi mật khẩu, trang chủ, HR (nhân viên, quỹ phép, loại phép), kiểm tra hệ thống
 sql/01_schema.sql       Bảng, hàm phân quyền, trigger, RLS, Storage, view, danh mục
 sql/01b_thu_hoi_quyen.sql  Thu hồi quyền thừa ở mức bảng
