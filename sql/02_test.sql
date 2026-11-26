@@ -62,6 +62,10 @@ begin
     from (values (u_hr, 'np.test2.hr@test.invalid'), (u_nv1, 'np.test2.nv1@test.invalid')) as x(id, email);
 
     insert into public.employees (code, full_name, email, role) values ('zzt2-hr', 'TEST HR', 'np.test2.hr@test.invalid', 'hr') returning id into e_hr;
+    begin -- từ 03_chuc_danh.sql: HR này kiêm Quản lý để làm người duyệt của NV1
+      execute format('update public.employees set title = %L where id = %L', 'manager', e_hr);
+    exception when undefined_column then null;
+    end;
     insert into public.employees (code, full_name, email, approver_id) values ('zzt2-nv1', 'TEST NV1', 'np.test2.nv1@test.invalid', e_hr) returning id into e_nv1;
     insert into public.employees (code, full_name, email) values ('zzt2-nv2', 'TEST NV2 (chưa có tài khoản)', 'np.test2.nv2@test.invalid') returning id into e_nv2;
     update public.employees set must_change_password = false where id = e_nv1;

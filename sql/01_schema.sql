@@ -2,6 +2,8 @@
 -- 01_schema.sql — Giai đoạn 1: bảng, hàm phân quyền, trigger, RLS,
 -- Storage, view số dư phép, danh mục loại phép.
 -- Chạy trong Supabase > SQL Editor. Chạy lại nhiều lần vẫn an toàn.
+-- QUAN TRỌNG: nếu chạy lại file này, phải chạy tiếp 01b_thu_hoi_quyen.sql, 02_dat_lai_mat_khau.sql
+-- và 03_chuc_danh.sql (03 thay hàm kiểm tra người duyệt; chạy lại 01 sẽ đưa hàm về bản cũ).
 -- =====================================================================
 
 -- ---------------------------------------------------------------------

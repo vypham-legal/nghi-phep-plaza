@@ -9,7 +9,32 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=2026-11-20c">
+  <!--
+    PHIÊN BẢN: mỗi lần cập nhật code, đổi chuỗi v=... ở dòng trên và trong import map
+    (tìm & thay "2026-11-20c"). Trình duyệt sẽ tự tải bản mới, người dùng không cần xóa cache.
+    Thêm file JS mới thì thêm một dòng vào import map.
+  -->
+  <script type="importmap">
+  {
+    "imports": {
+      "./js/app.js": "./js/app.js?v=2026-11-20c",
+      "./js/config.js": "./js/config.js?v=2026-11-20c",
+      "./js/supabase-client.js": "./js/supabase-client.js?v=2026-11-20c",
+      "./js/state.js": "./js/state.js?v=2026-11-20c",
+      "./js/ui.js": "./js/ui.js?v=2026-11-20c",
+      "./js/excel.js": "./js/excel.js?v=2026-11-20c",
+      "./js/views/auth.js": "./js/views/auth.js?v=2026-11-20c",
+      "./js/views/home.js": "./js/views/home.js?v=2026-11-20c",
+      "./js/views/system-check.js": "./js/views/system-check.js?v=2026-11-20c",
+      "./js/views/hr-employees.js": "./js/views/hr-employees.js?v=2026-11-20c",
+      "./js/views/hr-employees-excel.js": "./js/views/hr-employees-excel.js?v=2026-11-20c",
+      "./js/views/hr-balances.js": "./js/views/hr-balances.js?v=2026-11-20c",
+      "./js/views/hr-balances-excel.js": "./js/views/hr-balances-excel.js?v=2026-11-20c",
+      "./js/views/hr-leave-types.js": "./js/views/hr-leave-types.js?v=2026-11-20c"
+    }
+  }
+  </script>
 </head>
 <body>
   <header class="topbar">
@@ -28,6 +53,6 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <noscript><p class="container">Vui lòng bật JavaScript để dùng ứng dụng.</p></noscript>
-  <script type="module" src="js/app.js"></script>
+  <script type="module">import './js/app.js';</script>
 </body>
 </html>

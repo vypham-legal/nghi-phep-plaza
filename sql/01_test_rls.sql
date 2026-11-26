@@ -77,6 +77,11 @@ begin
     insert into public.employees (code, full_name, email, role) values ('zztest-hr', 'TEST HR', 'NP.Test.HR@test.invalid', 'hr') returning id into e_hr;
     insert into public.employees (code, full_name, email) values ('zztest-qa', 'TEST QUẢN LÝ A', 'np.test.qa@test.invalid') returning id into e_qa;
     insert into public.employees (code, full_name, email) values ('zztest-qb', 'TEST QUẢN LÝ B', 'np.test.qb@test.invalid') returning id into e_qb;
+    -- Từ 03_chuc_danh.sql: người duyệt phải có chức danh Quản lý / Giám sát (bỏ qua nếu chưa chạy 03)
+    begin
+      execute format('update public.employees set title = %L where id in (%L, %L)', 'manager', e_qa, e_qb);
+    exception when undefined_column then null;
+    end;
     insert into public.employees (code, full_name, email, approver_id) values ('zztest-nv1', 'TEST NV1', 'np.test.nv1@test.invalid', e_qa) returning id into e_nv1;
     insert into public.employees (code, full_name, email, approver_id) values ('zztest-nv2', 'TEST NV2', 'np.test.nv2@test.invalid', e_qb) returning id into e_nv2;
     update public.employees set approver_id = e_qa where id = e_hr;

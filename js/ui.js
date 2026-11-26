@@ -27,6 +27,12 @@ export function clear(el) {
   return el;
 }
 
+// ---------- Chức danh ----------
+export const TITLE_LABEL = { employee: 'Nhân viên', supervisor: 'Giám sát trực tiếp', manager: 'Quản lý' };
+/** Chỉ các chức danh này được làm người duyệt đơn */
+export const APPROVER_TITLES = ['supervisor', 'manager'];
+export const canApprove = (emp) => !!emp && emp.is_active && APPROVER_TITLES.includes(emp.title);
+
 // ---------- Số & ngày ----------
 const numFmt = new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 1 });
 

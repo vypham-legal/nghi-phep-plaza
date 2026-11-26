@@ -25,10 +25,14 @@ sql/01b_thu_hoi_quyen.sql  Thu hồi quyền thừa ở mức bảng
 sql/01_test_rls.sql     Tự kiểm thử phân quyền (tự hoàn tác dữ liệu thử)
 sql/02_dat_lai_mat_khau.sql  HR đặt lại mật khẩu tạm
 sql/02_test.sql         Kiểm thử Giai đoạn 2
+sql/03_chuc_danh.sql    Chức danh (Nhân viên / Giám sát trực tiếp / Quản lý), ràng buộc người duyệt
+sql/03_test.sql         Kiểm thử chức danh & quyền duyệt
 docs/                   Mô hình dữ liệu, hướng dẫn cài đặt, danh sách kiểm thử
 ```
 
 Chạy SQL theo thứ tự số trong tên file.
+
+**Cập nhật code:** mỗi lần sửa JS/CSS, đổi chuỗi phiên bản `v=…` trong `index.html` (tìm & thay) để trình duyệt tự tải bản mới; thêm file JS mới thì thêm một dòng vào import map trong `index.html`.
 
 ## Tiến độ
 | Giai đoạn | Nội dung | Trạng thái |

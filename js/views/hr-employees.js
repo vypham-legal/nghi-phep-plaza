@@ -1,9 +1,7 @@
-// HR: danh sách nhân viên, vai trò, người duyệt, tài khoản, đặt lại mật khẩu.
-import { h, clear, field, openDialog, toast, errMsg } from '../ui.js';
+// HR: danh sách nhân viên, chức danh, quyền HR, người duyệt, tài khoản, đặt lại mật khẩu.
+import { h, clear, field, openDialog, toast, errMsg, TITLE_LABEL, canApprove } from '../ui.js';
 import { passwordProblem } from './auth.js';
 import { exportEmployees, importEmployees } from './hr-employees-excel.js';
-
-const ROLE_LABEL = { employee: 'Nhân viên', hr: 'HR' };
 
 export async function renderEmployees(root, ctx) {
   const { supabase } = ctx;
@@ -75,7 +73,7 @@ export async function renderEmployees(root, ctx) {
         h('td', {}, e.full_name),
         h('td', {}, e.position || ''),
         h('td', { class: 'nowrap' }, e.email || h('span', { class: 'tag tag-warn' }, 'Chưa có email')),
-        h('td', {}, ROLE_LABEL[e.role] || e.role),
+        h('td', { class: 'nowrap' }, TITLE_LABEL[e.title] || 'Nhân viên', e.role === 'hr' ? [' ', h('span', { class: 'tag' }, 'HR')] : null),
         h('td', {}, approver ? approver.full_name : (e.is_active ? h('span', { class: 'tag tag-warn' }, 'Chưa gán') : '')),
         h('td', {}, e.user_id
           ? h('span', { class: 'tag tag-ok' }, e.must_change_password ? 'Có (chờ đổi MK)' : 'Có')
@@ -90,7 +88,7 @@ export async function renderEmployees(root, ctx) {
 
     clear(tableBox).append(h('table', { class: 'data' },
       h('thead', {}, h('tr', {},
-        ['Mã NV', 'Họ và tên', 'Vị trí công việc', 'Email', 'Vai trò', 'Người duyệt', 'Tài khoản', 'Trạng thái', ''].map((t) => h('th', {}, t)))),
+        ['Mã NV', 'Họ và tên', 'Vị trí công việc', 'Email', 'Chức danh', 'Người duyệt', 'Tài khoản', 'Trạng thái', ''].map((t) => h('th', {}, t)))),
       tbody,
     ));
   }
@@ -102,29 +100,33 @@ export async function renderEmployees(root, ctx) {
     const name = h('input', { type: 'text', required: true, value: emp?.full_name || '', maxlength: '120' });
     const position = h('input', { type: 'text', value: emp?.position || '', maxlength: '120' });
     const email = h('input', { type: 'email', value: emp?.email || '', autocapitalize: 'off', spellcheck: 'false' });
-    const role = h('select', {},
-      h('option', { value: 'employee', selected: (emp?.role || 'employee') === 'employee' }, 'Nhân viên'),
-      h('option', { value: 'hr', selected: emp?.role === 'hr' }, 'HR'),
+    const title = h('select', {},
+      ...Object.entries(TITLE_LABEL).map(([v, l]) => h('option', { value: v }, l)),
     );
+    title.value = emp?.title || 'employee';
+    const reports = emp ? employees.filter((x) => x.is_active && x.approver_id === emp.id) : [];
     const approver = h('select', {},
       h('option', { value: '' }, '— Không có (đơn do HR nhập hộ) —'),
       ...employees
-        .filter((x) => x.is_active && x.id !== emp?.id)
+        .filter((x) => x.id !== emp?.id && (canApprove(x) || x.id === emp?.approver_id))
         .sort((a, b) => a.full_name.localeCompare(b.full_name, 'vi'))
-        .map((x) => h('option', { value: x.id, selected: x.id === emp?.approver_id }, `${x.full_name} (${x.code})`)),
+        .map((x) => h('option', { value: x.id }, `${x.full_name} (${x.code}) – ${TITLE_LABEL[x.title] || ''}`)),
     );
-    role.value = emp?.role || 'employee';
     approver.value = emp?.approver_id || '';
-    const active = h('input', { type: 'checkbox', checked: emp ? emp.is_active : true });
+    const isHr = h('input', { type: 'checkbox', checked: emp?.role === 'hr', id: `hr-${Math.random().toString(36).slice(2, 7)}` });
+    const active = h('input', { type: 'checkbox', checked: emp ? emp.is_active : true, id: `act-${Math.random().toString(36).slice(2, 7)}` });
 
     const body = h('div', { class: 'form-grid' },
       field('Mã NV *', code),
       field('Họ và tên *', name),
       field('Vị trí công việc', position),
       field('Email đăng nhập', email, isNew ? 'Phải trùng với email tạo tài khoản trong Supabase.' : 'Lưu ý: đổi email ở đây không đổi email đăng nhập trong Supabase.'),
-      field('Vai trò', role),
-      field('Người duyệt đơn', approver),
-      h('div', { class: 'check-row' }, active, h('label', { for: active.id = `act-${Math.random().toString(36).slice(2, 7)}` }, 'Đang làm việc')),
+      field('Chức danh', title, reports.length
+        ? `Đang là người duyệt của ${reports.length} người: ${reports.map((r) => r.full_name).join(', ')}.`
+        : 'Chỉ Quản lý và Giám sát trực tiếp được chọn làm người duyệt đơn.'),
+      field('Người duyệt đơn', approver, 'Danh sách chỉ gồm Quản lý / Giám sát trực tiếp đang làm việc.'),
+      h('div', { class: 'check-row' }, isHr, h('label', { for: isHr.id }, 'Có quyền HR (quản lý nhân viên, quỹ phép, duyệt thay)')),
+      h('div', { class: 'check-row' }, active, h('label', { for: active.id }, 'Đang làm việc')),
     );
 
     // Đặt lại mật khẩu (chỉ khi đã có tài khoản và không phải chính mình)
@@ -143,17 +145,20 @@ export async function renderEmployees(root, ctx) {
           full_name: name.value.trim(),
           position: position.value.trim() || null,
           email: email.value.trim().toLowerCase() || null,
-          role: role.value,
+          role: isHr.checked ? 'hr' : 'employee',
+          title: title.value,
           approver_id: approver.value || null,
           is_active: active.checked,
         };
         if (!row.code || !row.full_name) throw new Error('Vui lòng nhập Mã NV và Họ và tên.');
         if (row.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(row.email)) throw new Error('Email không hợp lệ.');
+        if (row.title === 'employee' && reports.length) {
+          throw new Error(`${emp.full_name} đang là người duyệt của ${reports.length} người (${reports.map((r) => r.full_name).join(', ')}). Hãy gán người duyệt khác cho họ trước khi đổi chức danh thành Nhân viên.`);
+        }
 
         if (isSelf && row.role !== 'hr' && !confirm('Bạn sẽ mất quyền HR ngay sau khi lưu. Tiếp tục?')) return false;
         if (isSelf && !row.is_active && !confirm('Bạn đang đánh dấu chính mình đã nghỉ việc và sẽ không dùng được app. Tiếp tục?')) return false;
         if (emp && emp.is_active && !row.is_active) {
-          const reports = employees.filter((x) => x.is_active && x.approver_id === emp.id);
           if (reports.length && !confirm(`${emp.full_name} đang là người duyệt của: ${reports.map((r) => r.full_name).join(', ')}.\nHãy gán người duyệt khác cho họ sau khi lưu. Tiếp tục?`)) return false;
         }
 

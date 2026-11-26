@@ -28,6 +28,7 @@ export async function refreshSession() {
   if (!me) return;
 
   state.isHr = me.role === 'hr';
+  if (!['supervisor', 'manager'].includes(me.title)) return; // chỉ Quản lý / Giám sát trực tiếp được duyệt
   const { count } = await supabase
     .from('employees')
     .select('id', { count: 'exact', head: true })

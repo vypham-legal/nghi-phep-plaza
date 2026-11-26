@@ -4,6 +4,7 @@
 1. Dán toàn bộ `sql/02_dat_lai_mat_khau.sql` → **Run** → thấy `OK: đã tạo chức năng HR đặt lại mật khẩu`.
 2. Dán toàn bộ `sql/02_test.sql` → **Run** → dòng cuối phải là **TẤT CẢ ĐẠT**.
 3. Chạy lại `sql/01_test_rls.sql` → vẫn **TẤT CẢ ĐẠT**.
+4. Chức danh: dán `sql/03_chuc_danh.sql` → **Run**; rồi `sql/03_test.sql` → **TẤT CẢ ĐẠT**. Ai đang là người duyệt của người khác sẽ được tạm đặt chức danh **Quản lý** — vào app sửa thành Giám sát trực tiếp nếu đúng hơn.
 
 ## 2. Tải code lên GitHub
 Mở https://github.com/vypham-legal/nghi-phep-plaza/upload/main, **kéo thả** (không dùng nút chọn file):

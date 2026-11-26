@@ -61,6 +61,14 @@
 - [ ] H10. Nhập file Excel cũ `Mau nghi phep.xlsx` ở cả 2 màn: Nhân viên nhận đủ 15 người (thông tin khớp); Quỹ phép nhận số (1)–(6) năm 2026 khớp file.
 - [ ] H11. Bấm Nhập từ Excel rồi đóng hộp chọn file → không có gì xảy ra, nút dùng lại được.
 
+## I. Chức danh & quyền duyệt
+- [ ] I1. `03_test.sql`: **TẤT CẢ ĐẠT**; chạy lại `01_test_rls.sql` và `02_test.sql` vẫn **TẤT CẢ ĐẠT**.
+- [ ] I2. Nhân viên → Sửa: có ô **Chức danh** (Nhân viên / Giám sát trực tiếp / Quản lý) và ô tích **Có quyền HR**.
+- [ ] I3. Ô **Người duyệt đơn** chỉ liệt kê Quản lý / Giám sát trực tiếp đang làm việc.
+- [ ] I4. Đổi chức danh người đang là người duyệt thành Nhân viên → báo lỗi, ghi rõ đang duyệt cho ai.
+- [ ] I5. Một người vừa có quyền HR vừa là Quản lý: thấy menu HR và (từ Giai đoạn 3) duyệt được đơn của người mình duyệt.
+- [ ] I6. Excel: file mẫu có cột Chức danh, Quyền HR; gán người duyệt là Nhân viên thường → dòng Lỗi.
+
 ## G. Phân quyền qua giao diện
 - [ ] G1. Quản lý (không phải HR): chỉ thấy Trang chủ, không thấy menu HR.
 - [ ] G2. Nhân viên không có cách nào xem được thông tin người khác ngoài tên người duyệt của mình.
