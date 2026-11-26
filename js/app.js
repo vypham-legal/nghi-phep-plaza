@@ -8,14 +8,22 @@ import { renderEmployees } from './views/hr-employees.js';
 import { renderBalances } from './views/hr-balances.js';
 import { renderLeaveTypes } from './views/hr-leave-types.js';
 import { renderSystemCheck } from './views/system-check.js';
+import { renderNewRequest } from './views/request-form.js';
+import { renderMyRequests } from './views/my-requests.js';
+import { renderApprovals } from './views/approvals.js';
+import { renderHrRequests } from './views/hr-requests.js';
 
 const main = document.getElementById('app');
 const nav = document.getElementById('nav');
 const userBox = document.getElementById('user-box');
 
-// public: không cần đăng nhập; hr: chỉ HR
+// public: không cần đăng nhập; hr: chỉ HR; approver: Quản lý/Giám sát có người được duyệt, hoặc HR
 const routes = {
   '/':             { title: 'Trang chủ', render: renderHome, nav: true },
+  '/don':          { title: 'Đơn của tôi', render: renderMyRequests, nav: true },
+  '/don/moi':      { title: 'Nộp đơn', render: renderNewRequest },
+  '/duyet':        { title: 'Duyệt đơn', render: renderApprovals, approver: true, nav: true, badge: true },
+  '/hr/don':       { title: 'Tất cả đơn', render: renderHrRequests, hr: true, nav: true },
   '/hr/nhan-vien': { title: 'Nhân viên', render: renderEmployees, hr: true, nav: true },
   '/hr/quy-phep':  { title: 'Quỹ phép', render: renderBalances, hr: true, nav: true },
   '/hr/loai-phep': { title: 'Loại phép', render: renderLeaveTypes, hr: true, nav: true },
@@ -56,10 +64,32 @@ function renderNav(path) {
   nav.hidden = !show;
   if (!show) return;
   for (const [p, r] of Object.entries(routes)) {
-    if (!r.nav || (r.hr && !state.isHr)) continue;
-    nav.append(h('a', { href: '#' + p, class: p === path ? 'active' : null, 'aria-current': p === path ? 'page' : null }, r.title));
+    if (!allowed(r)) continue;
+    if (!r.nav) continue;
+    nav.append(h('a', { href: '#' + p, class: p === path ? 'active' : null, 'aria-current': p === path ? 'page' : null },
+      r.title, r.badge ? h('span', { class: 'nav-badge', hidden: true }) : null));
   }
+  refreshBadges();
 }
+
+function allowed(r) {
+  if (r.hr && !state.isHr) return false;
+  if (r.approver && !(state.isApprover || state.isHr)) return false;
+  return true;
+}
+
+/** Số đơn đang chờ duyệt (người mình duyệt; HR: tất cả) trên menu "Duyệt đơn" */
+async function refreshBadges() {
+  const badge = nav.querySelector('.nav-badge');
+  if (!badge || !state.me) return;
+  const { count, error } = await supabase.from('leave_requests')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'pending').neq('employee_id', state.me.id);
+  if (error) return;
+  badge.textContent = count > 99 ? '99+' : String(count || '');
+  badge.hidden = !count;
+}
+ctx.refreshBadges = refreshBadges;
 
 let renderSeq = 0;
 async function render() {
@@ -100,7 +130,7 @@ async function render() {
     return renderChangePassword(main, ctx, { forced: true });
   }
 
-  if (route.hr && !state.isHr) {
+  if (!allowed(route)) {
     ctx.go('/');
     return;
   }

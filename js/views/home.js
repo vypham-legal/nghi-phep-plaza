@@ -1,21 +1,35 @@
-// Trang chủ: số phép năm còn lại của chính mình.
+// Trang chủ: số phép năm còn lại, nút nộp đơn, đơn gần đây, việc cần duyệt.
 import { h, fmt, currentYear } from '../ui.js';
+import { loadLeaveTypes, loadPeople, requestCard, requestDetail } from '../requests.js';
 
 export async function renderHome(root, ctx) {
   const { supabase, state } = ctx;
   const me = state.me;
   const year = currentYear();
 
-  const [{ data: bal, error: e1 }, approverRes] = await Promise.all([
+  const [{ data: bal, error: e1 }, approverRes, { data: recent, error: e2 }, typeList, pendingRes] = await Promise.all([
     supabase.from('v_leave_balance').select('*').eq('employee_id', me.id).eq('year', year).maybeSingle(),
     me.approver_id
       ? supabase.from('employees').select('full_name, position').eq('id', me.approver_id).maybeSingle()
       : Promise.resolve({ data: null }),
+    supabase.from('leave_requests').select('*').eq('employee_id', me.id).neq('source', 'import')
+      .order('submitted_at', { ascending: false }).limit(3),
+    loadLeaveTypes(supabase),
+    state.isApprover || state.isHr
+      ? supabase.from('leave_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending').neq('employee_id', me.id)
+      : Promise.resolve({ count: 0 }),
   ]);
   if (e1) throw e1;
+  if (e2) throw e2;
   const approver = approverRes.data;
+  const types = new Map(typeList.map((t) => [t.id, t]));
 
   root.append(h('h2', { class: 'page-title' }, `Xin chào, ${me.full_name}`));
+
+  if (pendingRes.count) {
+    root.append(h('a', { href: '#/duyet', class: 'card attention todo-card' },
+      h('strong', {}, `${pendingRes.count} đơn đang chờ duyệt`), h('span', {}, 'Mở mục Duyệt đơn →')));
+  }
 
   if (!bal) {
     root.append(h('section', { class: 'card attention' },
@@ -39,17 +53,26 @@ export async function renderHome(root, ctx) {
     ));
   }
 
+  root.append(h('div', { class: 'home-actions' },
+    h('a', { href: '#/don/moi', class: 'btn btn-block' }, '+ Nộp đơn nghỉ phép'),
+    h('a', { href: '#/don', class: 'btn btn-secondary btn-block' }, 'Xem đơn của tôi'),
+  ));
+
+  if (recent.length) {
+    const people = await loadPeople(supabase);
+    const list = h('div', { class: 'req-list' });
+    for (const r of recent) {
+      list.append(requestCard(r, { types, people, onOpen: (x) => requestDetail(ctx, x, { types, people }) }));
+    }
+    root.append(h('h3', { class: 'section-title' }, 'Đơn gần đây'), list);
+  }
+
   root.append(h('section', { class: 'card' },
     h('h3', {}, 'Thông tin của bạn'),
     h('dl', { class: 'info-grid' },
       h('dt', {}, 'Mã NV'), h('dd', {}, me.code),
       h('dt', {}, 'Vị trí'), h('dd', {}, me.position || '—'),
-      h('dt', {}, 'Người duyệt đơn'), h('dd', {}, approver ? approver.full_name : 'Đơn của bạn do HR nhập hộ'),
+      h('dt', {}, 'Người duyệt đơn'), h('dd', {}, approver ? approver.full_name : 'Đơn của bạn do HR xử lý'),
     ),
-  ));
-
-  root.append(h('section', { class: 'card muted-card' },
-    h('h3', {}, 'Nộp đơn nghỉ phép'),
-    h('p', { class: 'muted' }, 'Chức năng nộp đơn, xem lịch sử và duyệt đơn sẽ có ở Giai đoạn 3.'),
   ));
 }

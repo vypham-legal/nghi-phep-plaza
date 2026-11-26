@@ -325,6 +325,92 @@ table.data .negative { color: var(--danger); }
 .balance-grid dd, .info-grid dd { margin: 0; font-weight: 600; }
 .balance-grid dd { text-align: right; }
 
+/* ---------- Đơn nghỉ phép ---------- */
+.nav-badge {
+  display: inline-block;
+  min-width: 20px;
+  margin-left: 6px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--gold-600);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+}
+.section-title { margin: 20px 0 8px; font-size: 1rem; }
+.req-list { display: grid; gap: 10px; grid-template-columns: 1fr; margin-bottom: 8px; }
+@media (min-width: 760px) { .req-list { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1100px) { .req-list { grid-template-columns: 1fr 1fr 1fr; } }
+.req-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  font: inherit;
+  color: var(--text);
+  cursor: pointer;
+}
+.req-card:hover { border-color: var(--gold-300); }
+.req-card.attention { background: var(--attention); border-color: var(--attention-border); }
+.req-card > span { display: block; }
+.req-card-top { display: flex !important; justify-content: space-between; align-items: center; gap: 8px; }
+.req-type { font-weight: 700; color: var(--plum-700); }
+.req-emp { font-weight: 600; }
+.req-meta { color: var(--muted); font-size: 0.92rem; }
+.req-reason { font-size: 0.92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.req-warn { font-size: 0.88rem; color: #7a5600; font-weight: 600; }
+.home-actions { display: grid; gap: 10px; grid-template-columns: 1fr; margin-bottom: 16px; }
+@media (min-width: 560px) { .home-actions { grid-template-columns: 1fr 1fr; } }
+a.btn { text-decoration: none; }
+.todo-card { display: flex; flex-direction: column; gap: 2px; text-decoration: none; color: var(--text); }
+.form-card { max-width: 760px; }
+.form-actions { display: flex; gap: 10px; max-width: 760px; }
+.form-actions .btn { flex: 1; }
+.form-info { margin: -4px 0 12px; }
+.form-info .form-error { margin: 6px 0; }
+.balance-line { margin: 0 0 6px; color: var(--plum-700); }
+.days-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.days-input { width: 110px !important; }
+.chip-row { display: flex; gap: 6px; }
+.chip {
+  border: 1px solid var(--gold-300);
+  background: #fff;
+  color: var(--plum-700);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+.chip:hover { background: #fffaf3; }
+.file-input { min-height: auto; padding: 8px 0; border: 0; }
+.sep { border: 0; border-top: 1px solid var(--border); margin: 8px 0 16px; }
+.detail-grid { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0; }
+.detail-grid dt { color: var(--muted); }
+.detail-grid dd { margin: 0; font-weight: 500; overflow-wrap: anywhere; }
+@media (max-width: 480px) {
+  .detail-grid { grid-template-columns: 1fr; gap: 0; }
+  .detail-grid dd { margin-bottom: 8px; }
+}
+.detail-sub { margin: 16px 0 6px; font-size: 0.95rem; }
+.file-list { display: flex; flex-direction: column; gap: 6px; }
+.file-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.file-add { font-size: 0.9rem; color: var(--muted); }
+.link-btn { background: none; border: 0; padding: 0; font: inherit; color: var(--plum-700); text-decoration: underline; cursor: pointer; overflow-wrap: anywhere; text-align: left; }
+.link-btn.danger { color: var(--danger); font-size: 0.85rem; }
+.small { font-size: 0.82rem; }
+.btn-danger { color: var(--danger) !important; border-color: #f2b8c2 !important; background: #fff !important; box-shadow: none !important; }
+tr.clickable { cursor: pointer; }
+tr.clickable:focus-visible { outline: 3px solid var(--gold-300); outline-offset: -3px; }
+
 /* ---------- Hộp thoại ---------- */
 .dialog {
   border: 0;
