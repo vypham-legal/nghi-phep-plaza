@@ -19,7 +19,9 @@ js/app.js               Khởi động, điều hướng (#/...), menu theo vai 
 js/state.js             Phiên đăng nhập + hồ sơ nhân viên
 js/ui.js                Tiện ích giao diện (hộp thoại, thông báo, định dạng số)
 js/excel.js             Đọc / ghi Excel trên trình duyệt (ExcelJS, tải khi cần)
-js/views/               Các màn hình: đăng nhập, đổi mật khẩu, trang chủ, HR (nhân viên, quỹ phép, loại phép), kiểm tra hệ thống
+js/requests.js          Dùng chung cho đơn nghỉ phép (nhãn, ngày, đính kèm, hộp chi tiết)
+js/views/               Các màn hình: đăng nhập, đổi mật khẩu, trang chủ, nộp đơn, đơn của tôi, duyệt đơn,
+                        HR (tất cả đơn, nhân viên, quỹ phép, loại phép), kiểm tra hệ thống
 sql/01_schema.sql       Bảng, hàm phân quyền, trigger, RLS, Storage, view, danh mục
 sql/01b_thu_hoi_quyen.sql  Thu hồi quyền thừa ở mức bảng
 sql/01_test_rls.sql     Tự kiểm thử phân quyền (tự hoàn tác dữ liệu thử)
@@ -27,6 +29,8 @@ sql/02_dat_lai_mat_khau.sql  HR đặt lại mật khẩu tạm
 sql/02_test.sql         Kiểm thử Giai đoạn 2
 sql/03_chuc_danh.sql    Chức danh (Nhân viên / Giám sát trực tiếp / Quản lý), ràng buộc người duyệt
 sql/03_test.sql         Kiểm thử chức danh & quyền duyệt
+sql/04_don_nghi_phep.sql  Giai đoạn 3: tên người duyệt/hủy cho nhân viên xem
+sql/04_test.sql         Kiểm thử Giai đoạn 3 (tên người liên quan, quyền file)
 docs/                   Mô hình dữ liệu, hướng dẫn cài đặt, danh sách kiểm thử
 ```
 
@@ -38,10 +42,10 @@ Chạy SQL theo thứ tự số trong tên file.
 | Giai đoạn | Nội dung | Trạng thái |
 |---|---|---|
 | 1 | Nền móng: database, phân quyền, Storage, khung web | Xong |
-| 2 | Đăng nhập, đổi mật khẩu, HR quản lý nhân viên / người duyệt / quỹ phép | Chờ kiểm tra |
-| 3 | Nộp / duyệt / hủy đơn, đính kèm, HR nhập hộ | — |
+| 2 | Đăng nhập, đổi mật khẩu, HR quản lý nhân viên / người duyệt / quỹ phép, Excel, chức danh | Xong |
+| 3 | Nộp / duyệt / hủy đơn, đính kèm, HR nhập hộ | Chờ kiểm tra |
 | 4 | Bảng tổng hợp, xuất Excel | — |
 | 5 | Nhập Excel, chuyển số liệu tháng 1–10/2026 | — |
 | 6 | Kết chuyển năm, rà soát bảo mật, hướng dẫn vận hành | — |
 
-Hướng dẫn: [Giai đoạn 1](docs/GD1-huong-dan.md) · [Giai đoạn 2](docs/GD2-huong-dan.md).
+Hướng dẫn: [Giai đoạn 1](docs/GD1-huong-dan.md) · [Giai đoạn 2](docs/GD2-huong-dan.md) · [Giai đoạn 3](docs/GD3-huong-dan.md).
